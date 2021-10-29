@@ -1,0 +1,26 @@
+sudo chmod u+x Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh
+
+change latest with correct name as package
+
+miniconda installed at home/amirul/miniconda3
+
+source ~/.bashrc
+conda config --set auto_activate_base false
+source ~/.bashrc
+-to disable startup on
+
+conda env list
+conda info --envs
+conda info -e
+shows existing envs
+
+conda activate base
+which python
+python
+exit() to exit python
+conda deactivate 
+
+conda env create --name DB_<Team-ID> -f environment.yml
+
+activate and use python

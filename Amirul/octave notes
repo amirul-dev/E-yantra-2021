@@ -1,0 +1,19 @@
+launch octave with gui
+
+/usr/local/OCTAVE/5.2.0/bin/octave --gui
+
+without gui
+
+/usr/local/OCTAVE/5.2.0/bin/octave
+
+
+
+pkg list
+
+pkg install -forge control
+(didnt work)
+
+manually download packages from https://octave.sourceforge.io/packages.php
+and install by command in octave
+
+pkg install /home/amirul/Downloads/control-3.3.1.tar.gz

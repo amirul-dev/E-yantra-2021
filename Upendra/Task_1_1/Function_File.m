@@ -14,7 +14,7 @@ function [x_1,x_2] = find_equilibrium_points(x1_dot, x2_dot)
   x1_dot == 0;
   x2_dot == 0;
   ################## ADD YOUR CODE HERE ######################
-  
+  [x_1, x_2] = solve(x1_dot == 0, x2_dot ==0);
   ############################################################  
   x_1=double(x_1);
   x_2=double(x_2);
@@ -38,7 +38,13 @@ function jacobian_matrices = find_jacobian_matrices(x_1, x_2, x1_dot, x2_dot)
   solutions = [x_1, x_2];
   jacobian_matrices = {};
   ################## ADD YOUR CODE HERE ######################
-
+  x=[x1,x2];
+  J=jacobian([x1_dot x2_dot],x);
+  for i = 1:length(solutions),
+    jacobian_matrices{i}=subs(J,solutions(i));
+    jacobian_matrices{i}=double(jacobian_matrices{i});
+    disp(jacobian_matrices{i});
+   end;
   ############################################################  
 endfunction
 
@@ -62,7 +68,11 @@ function [eigen_values stability] = check_eigen_values(x_1, x_2, jacobian_matric
     matrix = jacobian_matrices{k};
     flag = 1;
     ################## ADD YOUR CODE HERE ######################
-
+    
+    eigen_values{k}=eig(matrix);
+    if any(real(eigen_values{k})>0) !=0,
+       flag=0;
+    end;
     ############################################################
     if flag == 1
       fprintf("The system is stable for equilibrium point (%d, %d) \n",double(x_1(k)),double(x_2(k)));

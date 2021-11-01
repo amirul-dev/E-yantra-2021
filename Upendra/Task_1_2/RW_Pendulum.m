@@ -98,12 +98,14 @@ endfunction
 ##          govern this system.
 function dy = RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u)
   ##u=2*u
-  I1=;
-  I2=;
-  dy(1,1) = ;
-  dy(2,1) = ;
-  dy(3,1) = ;
-  dy(4,1) = ;
+  I1=(1/3)*m1*l1^2;
+  I2=(1/2)*m2*wr^2;
+  I2o = m2*l1^2;
+  y1 = -1*y(1);
+  dy(1,1) = y(2);
+  dy(2,1) = (-u + (g * l1 * (m1/2 + m2 )* sin(y1))) /(I1 + I2o) ;
+  dy(3,1) = y(4);
+  dy(4,1) = u/I2 - dy(2,1);
 endfunction
 
 ## Function : sim_RW_pendulum()
@@ -124,7 +126,7 @@ endfunction
 function [t,y] = sim_RW_pendulum(m1, m2, l1, wr, g, y0)
   tspan = 0:0.1:10;                  ## Initialise time step           
   u = 0;                             ## No Input
-  [t,y] = ; ## Solving the differential equation    
+  [t,y] = ode45(@(t,y)(RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u)),tspan,y0); ## Solving the differential equation    
 endfunction
 
 ## Function : RW_pendulum_AB_matrix()
@@ -139,10 +141,11 @@ endfunction
 ##          
 ## Purpose: Declare the A and B matrices in this function.
 function [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g)
-  I1= ;  # Moment of Inertia of pendulum bar
-  I2= ; # Moment of Inertia of reaction wheel
-  A = ;
-  B = ;  
+  I1=(1/3)*m1*l1^2;  # Moment of Inertia of pendulum bar
+  I2=(1/2)*m2*wr^2; # Moment of Inertia of reaction wheel
+  I2o = m2*l1^2;
+  A = [0 1 0 0;(g * l1 * (m1/2 + m2))/(I1 + I2o) 0 0 0;0 0 0 1;-(g * l1 * (m1/2 + m2))/(I1 + I2o) 0 0 0];
+  B = [0;-1/(I1 + I2o);0;(1/I2)+(1/(I1 + I2o))];  
 endfunction
 
 ## Function : pole_place_RW_pendulum()
@@ -163,9 +166,11 @@ endfunction
 ##          tf = 10 with initial condition y0 and input u = -Kx where K is
 ##          calculated using Pole Placement Technique.
 function [t,y] = pole_place_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0)
-  
+  [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g);
+  eigs = [-1;-2;-3;-4];
+  K = place(A,B,eigs);
   tspan = 0:0.1:10;
-  [t,y] = ;
+  [t,y] = ode45(@(t,y)(RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u = -K*(y-y_setpoint))),tspan,y0);
 endfunction
 
 ## Function : lqr_RW_pendulum()
@@ -186,9 +191,12 @@ endfunction
 ##          tf = 10 with initial condition y0 and input u = -Kx where K is
 ##          calculated using LQR Controller.
 function [t,y] = lqr_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0)
-  
+  [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g);
+  Q = [2 0 0 0;0 3 0 0;0 0 4 0;0 0 0 5];
+  R = [0.001]
+  K = lqr(A,B,Q,R)
   tspan = 0:0.1:10; # Time Array 
-  [t,y] = ;  # ODE solver to solve differential equations
+  [t,y] = ode45(@(t,y)(RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u = -K*(y-y_setpoint))),tspan,y0);  # ODE solver to solve differential equations
 endfunction
 
 ## Function : RW_pendulum_main()
@@ -207,8 +215,8 @@ function RW_pendulum_main()
 
 ## Function Calls for different control techniques for stabilizing RW Pendulum
   
-  [t,y] = sim_RW_pendulum(m1, m2, l1, wr, g, y0);
-##  [t,y] = pole_place_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
+##  [t,y] = sim_RW_pendulum(m1, m2, l1, wr, g, y0);
+  [t,y] = pole_place_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
 ##  [t,y] = lqr_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
   
   for k = 1:length(t)

@@ -27,7 +27,7 @@ pkg load image;
 ##*        http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode 
 ##*     
 ##*
-##*  This software is made available on an “AS IS WHERE IS BASIS”. 
+##*  This software is made available on an ï¿½AS IS WHERE IS BASISï¿½. 
 ##*  Licensee/end user indemnifies and will keep e-Yantra indemnified from
 ##*  any and all claim(s) that emanate from the use of the Software or 
 ##*  breach of the terms of this agreement.
@@ -83,8 +83,7 @@ endfunction
 
 ## Function : RW_pendulum_dynamics()
 ## ----------------------------------------------------
-## Input:   y - State Vector. In case of inverted RW pendulum, the state variables
-##              are angle made by RW, angular velocity of RW theta_dot, angle of pendulum
+## Input:   y f pendulum
 ##              bar alpha wrt vertical and angular velocity alpha_dot of pendulum
 ##              bob.
 ##          m1 - Mass of pendulum bar

@@ -26,7 +26,7 @@ pkg load control;
 ##*        http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode 
 ##*     
 ##*
-##*  This software is made available on an “AS IS WHERE IS BASIS”. 
+##*  This software is made available on an ï¿½AS IS WHERE IS BASISï¿½. 
 ##*  Licensee/end user indemnifies and will keep e-Yantra indemnified from
 ##*  any and all claim(s) that emanate from the use of the Software or 
 ##*  breach of the terms of this agreement.
@@ -111,12 +111,13 @@ endfunction
 ## Purpose: Calculates the value of the vector dy according to the equations which 
 ##          govern this system.
 function dy = complex_pulley_dynamics(y, m1, m2, m3, g, rA, rB, u)
-  
-  
-  dy(1,1) = ;
-  dy(2,1) = ;
-  dy(3,1) = ;
-  dy(4,1) = ;
+  deno_x = (m1+ m2+ m3)*(m2 + m3) - (m2 - m3)^2 ;
+  a = u(1)/rA + (m1 - m2 - m3)*g;
+  b = u(2)/rB + (m2 - m3)*g;
+  dy(1,1) = y(2) ;
+  dy(2,1) = (a*(m2 + m3) - b*(m2 - m3))/deno_x;
+  dy(3,1) = y(4);
+  dy(4,1) = (a*(m2 - m3) - b*(m1 +m2 +m3))/(-1*deno_x);
 endfunction
 
 ## Function : sim_complex_pulley()
@@ -139,7 +140,7 @@ endfunction
 function [t,y] = sim_complex_pulley(m1, m2, m3, g, rA, rB, y0)
   tspan = 0:0.1:10;                  ## Initialise time step           
   u = [0; 0];                             ## No Input
-  [t,y] = ; 
+  [t,y] = ode45(@(t,y)complex_pulley_dynamics(y, m1, m2, m3, g, rA, rB, u),tspan,y0) ; 
 endfunction
 
 ## Function : complex_pulley_AB_matrix()
@@ -156,8 +157,9 @@ endfunction
 ##          
 ## Purpose: Declare the A and B matrices in this function.
 function [A,B] = complex_pulley_AB_matrix(m1, m2, m3, g, rA, rB)
-  A = ;
-  B = ;
+  A = [0 1 0 0; 0 0 0 0;0 0 0 1;0 0 0 0 ] ;
+  deno_x = (m1+ m2+ m3)*(m2 + m3) - (m2 - m3)^2 ;
+  B = [0 0; (m2 +m3)/(rA*deno_x) -(m2-m3)/(rB*deno_x);0 0;(m2 -m3)/(rA*-1*deno_x) -(m1+m2+m3)/(rB*-1*deno_x)];
 endfunction
 
 ## Function : pole_place_complex_pulley()
@@ -180,9 +182,11 @@ endfunction
 ##          tf = 10 with initial condition y0 and input u = -Kx where K is
 ##          calculated using Pole Placement Technique.
 function [t,y] = pole_place_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0)
-  
+  [A,B] = complex_pulley_AB_matrix(m1, m2, m3, g, rA, rB);
+  eigs = [-1;-1;-1;-1];
+  K = place(A,B,eigs);
   tspan = 0:0.1:10;                  ## Initialise time step 
-  [t,y] = ;
+  [t,y] = ode45(@(t,y)complex_pulley_dynamics(y, m1, m2, m3, g, rA, rB, -K*(y-y_setpoint)),tspan,y0);
 endfunction
 
 ## Function : lqr_complex_pulley()
@@ -205,9 +209,12 @@ endfunction
 ##          tf = 10 with initial condition y0 and input u = -Kx where K is
 ##          calculated using LQR Controller.
 function [t,y] = lqr_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0)
-    
+   [A,B] = complex_pulley_AB_matrix(m1, m2, m3, g, rA, rB);
+  Q = [2500 0 0 0;0 1 0 0;0 0 2500 0;0 0 0 1];
+  R = [0.001 0;0 0.001] ;
+  K = lqr(A,B,Q,R);
   tspan = 0:0.1:10;                  ## Initialise time step 
-  [t,y] = ;
+  [t,y] = ode45(@(t,y)complex_pulley_dynamics(y, m1, m2, m3, g, rA, rB, -K*(y-y_setpoint)),tspan,y0);
 endfunction
 
 ## Function : complex_pulley_main()
@@ -225,9 +232,9 @@ function complex_pulley_main()
   y_setpoint = [0.6 ; 0; 0.8; 0];
   y0 = [0.4 ; 0; 0.5; 0];
   
-  [t,y] = sim_complex_pulley(m1, m2, m3, g, rA, rB, y0)
-##  [t,y] = pole_place_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0)
-##  [t,y] = lqr_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0);
+ # [t,y] = sim_complex_pulley(m1, m2, m3, g, rA, rB, y0);
+# [t,y] = pole_place_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0);
+ [t,y] = lqr_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0)
   
   for k = 1:length(t)
     draw_complex_pulley(y(k, :));

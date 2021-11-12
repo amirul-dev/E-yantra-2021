@@ -194,8 +194,8 @@ endfunction
 ##          calculated using LQR Controller.
 function [t,y] = lqr_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0)
   [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g);
-  Q = [5000 0 0 0;0 10 0 0;0 0 1000 0;0 0 0 0.01];
-  R = [2000]
+  Q = [500 0 0 0;0 10 0 0;0 0 10 0;0 0 0 0.01];
+  R = [20];
   K = lqr(A,B,Q,R)
   tspan = 0:0.1:20; # Time Array
   T_max = -K* (y0-y_setpoint);

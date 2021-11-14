@@ -14,9 +14,9 @@ pkg load image;
 ##*  Version: 2.0.0  
 ##*  Date: October 27, 2021
 ##*
-##*  Team ID :
-##*  Team Leader Name:
-##*  Team Member Name
+##*  Team ID : 1021
+##*  Team Leader Name: Amirul Haqe
+##*  Team Member Name: Muhammad Basil V, Tarala Trilokesh, SOMU BALA UPENDRA REDDY
 ##*
 ##*  
 ##*  Author: e-Yantra Project, Department of Computer Science
@@ -145,7 +145,7 @@ function [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g)
   I2= m2 * wr^2 * 0.5; # Moment of Inertia of reaction wheel
   I2o = m2*l1^2;
   a = g * l1 * (m1/2 + m2);
-  b = I1 + I2o
+  b = I1 + I2o;
   A = [0 1 0 0;a/b 0 0 0;0 0 0 1;-a/b 0 0 0];
   B = [0;-1/b;0;(1/I2)+(1/b)];  
 endfunction
@@ -169,7 +169,7 @@ endfunction
 ##          calculated using Pole Placement Technique.
 function [t,y] = pole_place_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0)
   [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g);
-  eigs = [-10;-10;-10;-10];
+  eigs = [-2; -10; -2; -4];   
   K = place(A,B,eigs)
   tspan = 0:0.1:10;
   [t,y] = ode45(@(t,y)(RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u = -K*(y-y_setpoint))),tspan,y0);
@@ -195,11 +195,9 @@ endfunction
 function [t,y] = lqr_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0)
   [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g);
   Q = [5000 0 0 0;0 10 0 0;0 0 1000 0;0 0 0 0.01];
-  R = [2000]
-  K = lqr(A,B,Q,R)
+  R = [2000];
+  K = lqr(A,B,Q,R);
   tspan = 0:0.1:20; # Time Array
-  T_max = -K* (y0-y_setpoint);
-  disp(T_max);
   [t,y] = ode45(@(t,y)(RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u = -K*(y-y_setpoint))),tspan,y0);  # ODE solver to solve differential equations
 endfunction
 
@@ -209,22 +207,21 @@ endfunction
 ##          respective functions and observing the behavior of the system. Constant
 ##          parameters like mass of Reaction Wheel, mass of pendulum bar etc are declared here.
 function RW_pendulum_main()
-  m1 = 2;     # Mass of Pendulum Bar
-  m2= 4.952;   # Mass of Reaction Wheel 
-  l1= 0.8;      # Length of Pendulum Bar
+  m1 = 8;     # Mass of Pendulum Bar
+  m2= 0.08;   # Mass of Reaction Wheel 
+  l1= 3;      # Length of Pendulum Bar
   g = 9.8;    # Centre of Gravity
   y0 = [0.9*pi; 0; 0; 0]; # Initial Conditions
   y_setpoint = [pi; 0; 2*pi; 0];  # Reference Point
-  wr=0.3/2; #wheel radius
+  wr=1; #wheel radius
 
 ## Function Calls for different control techniques for stabilizing RW Pendulum
   
   % [t,y] = sim_RW_pendulum(m1, m2, l1, wr, g, y0);
-  % [t,y] = pole_place_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
-  [t,y] = lqr_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
+  [t,y] = pole_place_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
+  %[t,y] = lqr_RW_pendulum(m1, m2, l1, wr, g, y_setpoint, y0);
   
-  % for k = 1:length(t)
-  %   draw_RW_pendulum(y(k, :), m1, m2, l1, wr);  # Function to draw current state of RW Pendulum
-  % endfor
-  disp(y(length(y)))
+  for k = 1:length(t)
+    draw_RW_pendulum(y(k, :), m1, m2, l1, wr);  # Function to draw current state of RW Pendulum
+  endfor
 endfunction

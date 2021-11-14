@@ -12,9 +12,9 @@ pkg load control;
 ##*  Version: 2.0.0  
 ##*  Date: October 13, 2021
 ##*
-##*  Team ID :
-##*  Team Leader Name:
-##*  Team Member Name
+##*  Team ID : 1021
+##*  Team Leader Name: Amirul Haqe
+##*  Team Member Name: Muhammad Basil V, Tarala Trilokesh, SOMU BALA UPENDRA REDDY
 ##*
 ##*  
 ##*  Author: e-Yantra Project, Department of Computer Science
@@ -132,7 +132,7 @@ endfunction
 ##          calculated using Pole Placement Technique.
 function [t,y] = pole_place_mass_spring(m, k, y_setpoint, y0)
   [A,B] = mass_spring_AB_matrix(m, k);  ## Initialize A and B matrix 
-  eigs = [-300,-300];                    ## Initialise desired eigenvalues
+  eigs = [-20,-20];                    ## Initialise desired eigenvalues
   K = place (A, B, eigs);                ## Calculate K matrix for desired eigenvalues
   tspan = 0:0.1:10;                   ## Initialise time step 
   [t,y] = ode45(@(t,y)mass_spring_dynamics(y, m, k, -K*(y-y_setpoint)),tspan,y0);
@@ -175,10 +175,9 @@ function mass_spring_main()
   y_setpoint = [0.7; 0];
   
   % [t,y] = sim_mass_spring(m,k, y0);      ## Test mass spring system with no input
-  [t,y] = pole_place_mass_spring(m, k, y_setpoint, y0); ## Test system with Pole Placement controller
-  % [t,y] = lqr_mass_spring(m, k, y_setpoint, y0);  ## Test system with LQR controller
+  %[t,y] = pole_place_mass_spring(m, k, y_setpoint, y0); ## Test system with Pole Placement controller
+ [t,y] = lqr_mass_spring(m, k, y_setpoint, y0);  ## Test system with LQR controller
   for k = 1:length(t)
     draw_mass_spring(y(k, :));  
   endfor
-  disp(y)
 endfunction

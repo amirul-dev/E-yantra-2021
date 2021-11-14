@@ -171,9 +171,9 @@ endfunction
 ##          calculated using LQR
 function [t,y] = lqr_pulley(m1, m2, g, r, y_setpoint, y0)
   [A,B] = pulley_AB_matrix(m1, m2 ,g, r);
-  Q = [50 0;0 10]
-  R = [0.0001]
-  K = lqr(A,B,Q,R)
+  Q = [50 0;0 10];
+  R = [0.0001];
+  K = lqr(A,B,Q,R);
   tspan = 0:0.1:10;                  ## Initialise time step 
   [t,y] = ode45(@(t,y)pulley_dynamics(y,m1,m2,g,r, -K * (y - y_setpoint)), tspan ,y0);  
 endfunction
@@ -186,15 +186,14 @@ endfunction
 function simple_pulley_main()
   m1 = 7.5;
   m2 = 7.51;
-  % m2 = 7;
   g = 9.8;
   r = 0.2;
   y0 = [0.5 ; 0];                   ## Initial condtion
   y_setpoint = [0.75; 0];              ## Set Point
   
   % [t,y] = sim_pulley(m1, m2, g, r, y0);
-  [t,y] = pole_place_pulley(m1, m2, g, r, y_setpoint, y0)
-  % [t,y] = lqr_pulley(m1, m2, g, r, y_setpoint, y0)
+  %[t,y] = pole_place_pulley(m1, m2, g, r, y_setpoint, y0)
+   [t,y] = lqr_pulley(m1, m2, g, r, y_setpoint, y0)
   
   for k = 1:length(t)
     draw_pulley(y(k, :));  

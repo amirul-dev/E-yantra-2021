@@ -12,9 +12,9 @@ pkg load control;
 ##*  Version: 2.0.0  
 ##*  Date: October 13, 2021
 ##*
-##*  Team ID :
-##*  Team Leader Name:
-##*  Team Member Name
+##*  Team ID : 1021
+##*  Team Leader Name: Amirul Haqe
+##*  Team Member Name: Muhammad Basil V, Tarala Trilokesh, SOMU BALA UPENDRA REDDY
 ##*
 ##*  
 ##*  Author: e-Yantra Project, Department of Computer Science

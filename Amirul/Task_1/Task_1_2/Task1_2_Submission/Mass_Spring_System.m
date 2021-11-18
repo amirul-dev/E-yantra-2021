@@ -26,7 +26,7 @@ pkg load control;
 ##*        http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode 
 ##*     
 ##*
-##*  This software is made available on an “AS IS WHERE IS BASIS”. 
+##*  This software is made available on an ï¿½AS IS WHERE IS BASISï¿½. 
 ##*  Licensee/end user indemnifies and will keep e-Yantra indemnified from
 ##*  any and all claim(s) that emanate from the use of the Software or 
 ##*  breach of the terms of this agreement.
@@ -180,4 +180,5 @@ function mass_spring_main()
   for k = 1:length(t)
     draw_mass_spring(y(k, :));  
   endfor
+  disp(y);
 endfunction

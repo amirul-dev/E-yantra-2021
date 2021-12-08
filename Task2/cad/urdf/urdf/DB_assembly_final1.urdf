@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="DB_assembly_final1">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="7.2871E-07 -0.089387 -0.055742"
+        rpy="0 0 0" />
+      <mass
+        value="6.3591" />
+      <inertia
+        ixx="0.18324"
+        ixy="-5.659E-07"
+        ixz="-9.4597E-07"
+        iyy="0.17139"
+        iyz="-0.017021"
+        izz="0.29251" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://DB_assembly_final1/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://DB_assembly_final1/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fork1">
+    <inertial>
+      <origin
+        xyz="0.051876 -0.13579 9.0586E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.15538" />
+      <inertia
+        ixx="0.001087"
+        ixy="0.00029044"
+        ixz="6.7429E-10"
+        iyy="0.00043765"
+        iyz="-1.2132E-09"
+        izz="0.00089018" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://DB_assembly_final1/meshes/fork1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://DB_assembly_final1/meshes/fork1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="frontWheel_Motor"
+    type="revolute">
+    <origin
+      xyz="0 0.30671 -0.05581"
+      rpy="1.5903 0.00049669 1.5198" />
+    <parent
+      link="base_link" />
+    <child
+      link="fork1" />
+    <axis
+      xyz="0.35687 -0.93416 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

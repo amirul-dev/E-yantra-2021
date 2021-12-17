@@ -98,7 +98,7 @@ endfunction
 ##          govern this system.
 function dy = RW_pendulum_dynamics(y, m1, m2, l1, wr, g, u)
   ##u=2*u
-  I1= m1*l1**2/3;
+  I1= m1*(l1*3)**2/3;
   I2= m2*wr**2/2;
   Iwo = m2*l1**2;
   a = (m1/2 + m2)*l1*g;
@@ -142,7 +142,7 @@ endfunction
 ##          
 ## Purpose: Declare the A and B matrices in this function.
 function [A, B] = RW_pendulum_AB_matrix(m1 , m2, l1, wr, g)
-  I1= m1*l1**2/3;
+  I1= m1*(l1*3)**2/3;
   I2= m2*wr**2/2;
   Iwo = m2*l1**2;
   a = (m1/2 + m2)*l1*g;

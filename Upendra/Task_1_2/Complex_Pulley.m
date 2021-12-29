@@ -228,7 +228,7 @@ endfunction
 function complex_pulley_main()
   m1 = 23.90;
   m2 = 11.95;
-  m3 = 12;
+  m3 = 15;
   g = 9.8;
   rA = 0.2;
   rB = 0.2;
@@ -238,7 +238,7 @@ function complex_pulley_main()
 ##  [t,y] = sim_complex_pulley(m1, m2, m3, g, rA, rB, y0)
 ##  [t,y] = pole_place_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0)
   [t,y] = lqr_complex_pulley(m1, m2, m3, g, rA, rB, y_setpoint, y0);
-  
+  disp(y);
   for k = 1:length(t)
     draw_complex_pulley(y(k, :));
   endfor

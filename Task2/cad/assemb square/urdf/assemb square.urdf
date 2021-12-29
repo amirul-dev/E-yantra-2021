@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="assemb square">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-5.04625716096626E-08 -0.0884661771110268 -0.0544389934143933"
+        rpy="0 0 0" />
+      <mass
+        value="5.68454889993894" />
+      <inertia
+        ixx="0.1662135522354"
+        ixy="5.75953091259257E-08"
+        ixz="-9.05149611417831E-09"
+        iyy="0.154448497087217"
+        iyz="-0.0164038033052864"
+        izz="0.261683877243785" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://assemb square/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://assemb square/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fork">
+    <inertial>
+      <origin
+        xyz="0.0512526995549616 -0.134161945679297 -2.94252469612566E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.143599499950691" />
+      <inertia
+        ixx="0.00100359152238864"
+        ixy="0.000268430778082277"
+        ixz="1.24513843246382E-19"
+        iyy="0.000403478269612014"
+        iyz="1.25833223142151E-18"
+        izz="0.000821050320116566" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://assemb square/meshes/fork.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://assemb square/meshes/fork.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fork_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.307428651839696 -0.0576800384919489"
+      rpy="1.56853519909698 0 1.57671521120076" />
+    <parent
+      link="base_link" />
+    <child
+      link="fork" />
+    <axis
+      xyz="0.356867031977588 -0.934155191329314 0" />
+  </joint>
+</robot>

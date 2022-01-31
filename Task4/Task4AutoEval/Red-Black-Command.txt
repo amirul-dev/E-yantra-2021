@@ -1,0 +1,1 @@
+sim.setShapeColor(sim.getObjectHandle('DeliveryPoint2'),'',sim.colorcomponent_ambient_diffuse,{0,0,0})
